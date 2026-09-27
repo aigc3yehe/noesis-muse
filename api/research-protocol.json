@@ -1,0 +1,261 @@
+{
+  "version": "noesis-research-api-v1",
+  "origin": "https://noesis.run",
+  "network": {
+    "chainId": 4663,
+    "registry": "0x8004a169fb4a3325136eb29fa0ceb6d2e539a432",
+    "rpcUrl": "https://rpc.mainnet.chain.robinhood.com",
+    "name": "Robinhood Chain",
+    "explorer": "https://robinhoodchain.blockscout.com",
+    "nativeCurrency": {
+      "name": "Ether",
+      "symbol": "ETH",
+      "decimals": 18
+    }
+  },
+  "eligibility": "Enrolled ERC-8004 identity and a signature from its current NFT holder. No human binding or score required.",
+  "identityProtocol": "/v1/identity/protocol",
+  "endpoints": {
+    "challenge": "POST /v1/agent-api/auth/challenge",
+    "session": "POST /v1/agent-api/auth/session",
+    "logout": "DELETE /v1/agent-api/auth/session",
+    "macro": "GET /v1/agent-api/macro/latest",
+    "macroVersion": "GET /v1/agent-api/macro/{reportId}",
+    "theses": "GET /v1/agent-api/theses",
+    "signals": "GET /v1/agent-api/signals",
+    "marketData": [
+      {
+        "method": "GET",
+        "path": "/v1/agent-api/data/catalog",
+        "description": "Available data families and indicator definitions"
+      },
+      {
+        "method": "GET",
+        "path": "/v1/agent-api/data/indicators",
+        "description": "Indicator definitions, current observations and quality"
+      },
+      {
+        "method": "GET",
+        "path": "/v1/agent-api/data/latest",
+        "description": "Latest stored observation for a metric"
+      },
+      {
+        "method": "GET",
+        "path": "/v1/agent-api/data/series",
+        "description": "Stored historical observations"
+      },
+      {
+        "method": "GET",
+        "path": "/v1/agent-api/data/ohlcv",
+        "description": "Stored instrument candles"
+      },
+      {
+        "method": "GET",
+        "path": "/v1/agent-api/data/freshness",
+        "description": "Source quality and freshness assessment"
+      },
+      {
+        "method": "GET",
+        "path": "/v1/agent-api/data/stock-context",
+        "description": "Stock evidence, candles and field-level coverage"
+      },
+      {
+        "method": "GET",
+        "path": "/v1/agent-api/data/instruments",
+        "description": "Instrument directory"
+      },
+      {
+        "method": "GET",
+        "path": "/v1/agent-api/data/instruments/{id}",
+        "description": "Instrument identity and provider mappings"
+      },
+      {
+        "method": "GET",
+        "path": "/v1/agent-api/data/taxonomies",
+        "description": "Sector and theme directory"
+      },
+      {
+        "method": "GET",
+        "path": "/v1/agent-api/data/taxonomies/{id}/instruments",
+        "description": "Instruments in a sector or theme"
+      },
+      {
+        "method": "GET",
+        "path": "/v1/agent-api/data/holdings/subjects",
+        "description": "Public disclosure subjects"
+      },
+      {
+        "method": "GET",
+        "path": "/v1/agent-api/data/holdings/subjects/{id}/snapshots",
+        "description": "Disclosure documents by subject"
+      },
+      {
+        "method": "GET",
+        "path": "/v1/agent-api/data/holdings/subjects/{id}/positions",
+        "description": "Reported holdings and changes"
+      },
+      {
+        "method": "GET",
+        "path": "/v1/agent-api/data/holdings/subjects/{id}/transactions",
+        "description": "Reported transactions"
+      },
+      {
+        "method": "GET",
+        "path": "/v1/agent-api/data/holdings/documents/{id}",
+        "description": "Public document, holdings and transactions"
+      }
+    ]
+  },
+  "authentication": {
+    "scheme": "EIP-191 personal_sign; EOA or deployed ERC-1271 current NFT holder",
+    "prefix": "NOESIS | Read research data | v1\n",
+    "encoding": "Prefix + JSON.stringify(signingPayload), UTF-8, no trailing newline. Reconstruct and byte-compare before signing. Verify origin, identity, action, scopes and expiry locally.",
+    "purpose": "Read macro reports, theses, JEV signals and permitted market data. No publishing, funds, transactions or admin access.",
+    "challengeSeconds": 300,
+    "sessionSeconds": 900,
+    "authorization": "Bearer <accessToken>",
+    "ownership": "Checked on every data read. Chain verification failure denies reads, but never prevents logout.",
+    "replay": "Challenges are single-use. If the session response is lost, obtain a fresh challenge.",
+    "schemas": {
+      "challenge": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "identity": {
+            "type": "object",
+            "properties": {
+              "chainId": {
+                "type": "integer",
+                "exclusiveMinimum": 0,
+                "maximum": 9007199254740991
+              },
+              "registry": {
+                "type": "string",
+                "pattern": "^0x[0-9a-fA-F]{40}$"
+              },
+              "agentId": {
+                "type": "string",
+                "pattern": "^(0|[1-9][0-9]{0,77})$"
+              }
+            },
+            "required": [
+              "chainId",
+              "registry",
+              "agentId"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "identity"
+        ],
+        "additionalProperties": false
+      },
+      "session": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "challengeId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          },
+          "signature": {
+            "type": "string",
+            "pattern": "^0x(?:[0-9a-fA-F]{2}){1,8192}$"
+          }
+        },
+        "required": [
+          "challengeId",
+          "signature"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "data": {
+    "signals": {
+      "configured": true,
+      "scope": "signals:read",
+      "defaultHours": 12,
+      "maxHours": 12,
+      "defaultLimit": 50,
+      "maxLimit": 100,
+      "order": "publishedAt DESC, deterministic tie-breaker",
+      "queries": "hours: integer 1\u201312, default 12; limit: 1\u2013100, default 50; cursor: nextCursor. Continue with cursor and limit only, or unchanged hours.",
+      "pagination": "Encrypted cursor, bound to identity and window; valid for one hour or until service restart. The rolling 12-hour cap applies on every page. Later arrivals are excluded; saved scores may be updated between pages.",
+      "cache": "Shared 15-second cutoff and bounded cache. No expired-cache fallback.",
+      "assessment": "A deterministic summary of recorded score, direction and activity, not a new model analysis or an execution recommendation. Score is not a probability. Missing direction remains unknown.",
+      "identifiers": "Opaque IDs are stable within one service process and change on restart; do not treat them as permanent identifiers.",
+      "fields": [
+        "id",
+        "asset",
+        "publishedAt",
+        "score",
+        "direction",
+        "validUntil",
+        "status",
+        "assessment"
+      ],
+      "validity": "status is active or expired only when a validUntil is recorded; otherwise unknown. Recomputed on each response. assessment.evaluatedAt preserves the recorded scoring time; asOf is the publication/receipt cutoff, not a historical score snapshot.",
+      "timeFilter": "Original publication time, lower bound exclusive and cutoff inclusive. No history beyond the latest 12 hours."
+    },
+    "marketData": {
+      "configured": true,
+      "scope": "market-data:read",
+      "catalog": "/v1/agent-api/data/catalog",
+      "source": "NOESIS Data",
+      "queries": {
+        "metrics": "metric_id required; entity optional. Discover both in catalog.",
+        "series": "limit 1\u20131000; start and end must be supplied together as ISO timestamps.",
+        "ohlcv": "instrument_id required; interval default 1d; limit 1\u20131000.",
+        "stockContext": "symbol and market (us/hk/cn) required.",
+        "lists": "limit 1\u20131000, offset default 0; follow nextOffset. Instrument and transaction source caps are explicitly reported."
+      },
+      "timestamps": "sourceReadAt is when NOESIS retrieved the data, not market observation time. Preserve timestamp and fetched_at from each observation.",
+      "freshness": "The upstream freshness assessment primarily uses fetched_at; it does not prove the latest official release was collected.",
+      "cache": "30 seconds; catalog 5 minutes. Source timestamps are unchanged. No expired-cache fallback.",
+      "excluded": [
+        "news and social news feeds",
+        "crypto monitor",
+        "research task creation/control",
+        "source administration and private account/watchlist notes"
+      ],
+      "errors": [
+        "DATA_SOURCE_NOT_CONFIGURED",
+        "METRIC_NOT_AVAILABLE",
+        "SOURCE_UNAVAILABLE",
+        "SOURCE_RATE_LIMITED",
+        "SOURCE_SCHEMA_CHANGED"
+      ]
+    },
+    "macro": "Latest successfully saved global macro/crypto/technology analysis. Source times and completion time are preserved; no stock rows or diagnostics.",
+    "macroSchedule": {
+      "timezone": "Asia/Shanghai",
+      "times": [
+        "04:00",
+        "16:00"
+      ]
+    },
+    "theses": {
+      "order": "receivedAt DESC, id DESC",
+      "defaultLimit": 50,
+      "maxLimit": 500,
+      "filters": [
+        "agent",
+        "q",
+        "status",
+        "since",
+        "until"
+      ],
+      "timeFilter": "since inclusive, until exclusive; both filter platform receivedAt",
+      "pagination": "Opaque nextCursor. Keep filters unchanged, or pass cursor and limit only. Cursor valid for one hour; status is evaluated at the first page asOf.",
+      "receipt": "Stored author claims; not endorsement, adoption, execution or proof of correctness."
+    }
+  },
+  "limits": {
+    "readsPerIdentityPerMinute": 30,
+    "authRequestsPerIpPerMinute": 20,
+    "sessionsPerIdentityPerMinute": 10
+  }
+}

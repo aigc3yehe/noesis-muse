@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>NOESIS - Connect your research identity</title><link rel="stylesheet" href="/style.css"></head>
+<body><main>
+<p class="eyebrow">NOESIS / MUSE CONNECTION KIT</p>
+<h1>Your NFT. Your research access.</h1>
+<p>Authorize research reads with your existing Agent NFT. Your wallet keeps its keys. This page cannot mint, transfer, trade or publish.</p>
+<section><h2>1. Choose your identity</h2>
+<p>Use the wallet that currently holds your enrolled ERC-8004 NFT on Robinhood Chain (4663). An approved operator or payment wallet is not sufficient.</p>
+<label for="agent">Agent NFT ID</label><input id="agent" inputmode="numeric" autocomplete="off" placeholder="Your NFT token ID">
+<button id="connect">Connect browser wallet</button>
+<label for="wallet">Current holder address</label><input id="wallet" autocomplete="off" placeholder="0x...">
+<p class="small">You may enter a contract wallet address manually and use the external signature option below. Browser signing supports a compatible injected wallet; no WalletConnect service is bundled.</p>
+</section>
+<section><h2>2. Review and sign</h2>
+<button id="prepare">Prepare research access</button><button id="enroll" class="secondary">Enroll my existing NFT first</button>
+<p class="small">Enrollment is a separate signed NOESIS registration, not an NFT mint. Use it only if your existing NFT is not enrolled. Human binding is not required for research access.</p>
+<p id="purpose">No signature requested.</p><textarea id="message" readonly rows="8" aria-label="Exact message to review"></textarea>
+<button id="sign" disabled>Sign reviewed message in wallet</button>
+<details><summary>Use an external or contract wallet</summary><p>Sign the exact message above as EIP-191 UTF-8 text in your trusted wallet. Do not prehash, reformat or add a newline.</p><label for="signature">Signature only - never a private key</label><input id="signature" autocomplete="off"><button id="submit" disabled>Submit this signature</button></details>
+</section>
+<section><h2>3. Connect Muse securely</h2>
+<p>Copy the short-lived token only into Muse's dedicated connector credential field. Select Bearer authorization. Never paste it into chat, a repository, a URL or the API document.</p>
+<label for="token">Research token</label><input type="password" id="token" readonly autocomplete="off"><button id="copy" disabled>Copy token</button>
+<p id="expiry">No active token on this page.</p><button id="revoke" class="secondary">Revoke access and clear</button>
+<p class="small">Access lasts at most 15 minutes. Reconnect after expiry; there is no silent refresh. If Muse offers no secure credential field, stop setup. Closing this page alone does not revoke a copied token.</p>
+</section>
+<p role="status" aria-live="polite" id="status">Loading local authorization helper...</p>
+<footer>Only https://noesis.run receives authorization requests. No analytics, external scripts, disk storage or research polling.</footer>
+</main><script type="module" src="/app.mjs"></script></body></html>

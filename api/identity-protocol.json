@@ -1,0 +1,329 @@
+{
+  "version": "noesis-identity-v1",
+  "origin": "https://noesis.run",
+  "network": {
+    "chainId": 4663,
+    "registry": "0x8004a169fb4a3325136eb29fa0ceb6d2e539a432",
+    "rpcUrl": "https://rpc.mainnet.chain.robinhood.com",
+    "name": "Robinhood Chain",
+    "explorer": "https://robinhoodchain.blockscout.com",
+    "nativeCurrency": {
+      "name": "Ether",
+      "symbol": "ETH",
+      "decimals": 18
+    }
+  },
+  "identityKey": "eip155:{chainId}:{registryLowercase}:{agentId}",
+  "agentSigning": {
+    "scheme": "EIP-191 personal_sign",
+    "prefix": "NOESIS | ERC-8004 advisor action | v1\n",
+    "encoding": "UTF-8",
+    "body": "Use the exact signingPayload object field order specified below. JSON.stringify without whitespace, UTF-8. Prefix plus JSON; no trailing newline. Reconstruct and byte-compare message before signing. Do not sort the keys, prehash or sign a hexadecimal string.",
+    "fieldOrder": [
+      "version",
+      "origin",
+      "action",
+      "requestId",
+      "identity",
+      "controller",
+      "blockNumber",
+      "blockHash",
+      "payload",
+      "nonce",
+      "issuedAt",
+      "expiresAt"
+    ],
+    "identityFieldOrder": [
+      "chainId",
+      "registry",
+      "agentId"
+    ],
+    "actions": [
+      "enroll",
+      "request_binding",
+      "status",
+      "withdraw_binding"
+    ],
+    "owner": "Current NFT holder. Chain ownership and transfers since the challenge block are checked for every identity-bearing request. Same-NFT transfers preserve confirmed user binding and history.",
+    "wallets": "EOA EIP-191 or deployed ERC-1271 wallets. Signature is variable-length hex; the signer is the current ownerOf, not getAgentWallet or an approved NFT operator."
+  },
+  "schemas": {
+    "identity": {
+      "type": "object",
+      "properties": {
+        "chainId": {
+          "const": 4663
+        },
+        "registry": {
+          "type": "string",
+          "const": "0x8004a169fb4a3325136eb29fa0ceb6d2e539a432"
+        },
+        "agentId": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]{0,77})$",
+          "description": "Canonical unsigned decimal uint256, less than 2^256."
+        }
+      },
+      "required": [
+        "chainId",
+        "registry",
+        "agentId"
+      ],
+      "additionalProperties": false
+    },
+    "agentChallenge": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "identity": {
+              "type": "object",
+              "properties": {
+                "chainId": {
+                  "const": 4663
+                },
+                "registry": {
+                  "type": "string",
+                  "const": "0x8004a169fb4a3325136eb29fa0ceb6d2e539a432"
+                },
+                "agentId": {
+                  "type": "string",
+                  "pattern": "^(0|[1-9][0-9]{0,77})$",
+                  "description": "Canonical unsigned decimal uint256, less than 2^256."
+                }
+              },
+              "required": [
+                "chainId",
+                "registry",
+                "agentId"
+              ],
+              "additionalProperties": false
+            },
+            "action": {
+              "const": "enroll"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {},
+              "required": [],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "identity",
+            "action",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "identity": {
+              "type": "object",
+              "properties": {
+                "chainId": {
+                  "const": 4663
+                },
+                "registry": {
+                  "type": "string",
+                  "const": "0x8004a169fb4a3325136eb29fa0ceb6d2e539a432"
+                },
+                "agentId": {
+                  "type": "string",
+                  "pattern": "^(0|[1-9][0-9]{0,77})$",
+                  "description": "Canonical unsigned decimal uint256, less than 2^256."
+                }
+              },
+              "required": [
+                "chainId",
+                "registry",
+                "agentId"
+              ],
+              "additionalProperties": false
+            },
+            "action": {
+              "const": "request_binding"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "userAddress": {
+                  "type": "string",
+                  "pattern": "^0x[0-9a-fA-F]{40}$"
+                }
+              },
+              "required": [
+                "userAddress"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "identity",
+            "action",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "identity": {
+              "type": "object",
+              "properties": {
+                "chainId": {
+                  "const": 4663
+                },
+                "registry": {
+                  "type": "string",
+                  "const": "0x8004a169fb4a3325136eb29fa0ceb6d2e539a432"
+                },
+                "agentId": {
+                  "type": "string",
+                  "pattern": "^(0|[1-9][0-9]{0,77})$",
+                  "description": "Canonical unsigned decimal uint256, less than 2^256."
+                }
+              },
+              "required": [
+                "chainId",
+                "registry",
+                "agentId"
+              ],
+              "additionalProperties": false
+            },
+            "action": {
+              "const": "status"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {},
+              "required": [],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "identity",
+            "action",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "identity": {
+              "type": "object",
+              "properties": {
+                "chainId": {
+                  "const": 4663
+                },
+                "registry": {
+                  "type": "string",
+                  "const": "0x8004a169fb4a3325136eb29fa0ceb6d2e539a432"
+                },
+                "agentId": {
+                  "type": "string",
+                  "pattern": "^(0|[1-9][0-9]{0,77})$",
+                  "description": "Canonical unsigned decimal uint256, less than 2^256."
+                }
+              },
+              "required": [
+                "chainId",
+                "registry",
+                "agentId"
+              ],
+              "additionalProperties": false
+            },
+            "action": {
+              "const": "withdraw_binding"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "requestId": {
+                  "type": "string",
+                  "format": "uuid"
+                }
+              },
+              "required": [
+                "requestId"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "identity",
+            "action",
+            "payload"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "agentExecute": {
+      "type": "object",
+      "properties": {
+        "challengeId": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "signature": {
+          "type": "string",
+          "pattern": "^0x([0-9a-fA-F]{2}){1,8192}$"
+        }
+      },
+      "required": [
+        "challengeId",
+        "signature"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "responses": {
+    "challenge": {
+      "fields": [
+        "challengeId",
+        "message",
+        "signingPayload",
+        "expiresAt",
+        "observation",
+        "serverTime"
+      ],
+      "check": "Every signed field must match the expected origin, action, NFT and target user. Read serverTime here to check deadlines."
+    },
+    "enroll": "{advisor,binding,requests,participation}",
+    "request_binding": "{request:{id,advisorKey,identity,controller,userAddress,origin,message,observation,createdAt,expiresAt,status}}",
+    "status": "{advisor,binding,requests,participation}",
+    "withdraw_binding": "{request}",
+    "errors": "{error:{code,message}}",
+    "advisor": "key, identity, controller, name, description, image, agentURI, metadataStatus, createdAt, lastSeenAt, verificationStatus, observation, bindingStatus, decisionScore, decisionSamples, proposalScore, proposalSamples, explorerUrl"
+  },
+  "retry": {
+    "mutation": "Persist the exact challengeId and signature before POST. An uncertain result may be retried exactly. Do not change the payload or identity to bypass rejection.",
+    "freshStatus": "A status challenge result is an immutable receipt for that request. Get and sign a NEW status challenge to see later progress. While waiting for a human, poll no faster than every 60 seconds with the user\u2019s Runtime scheduler.",
+    "expired": "New unsigned challenge needed after expiry. Query a fresh status proof first if a prior mutation may have succeeded.",
+    "transferred": "Use the current holding wallet and a new challenge. Pre-transfer pending binding requests are invalidated, including when the NFT transfers back. Already accepted history remains under the same identity."
+  },
+  "fees": {
+    "platform": 0,
+    "bindingGas": 0,
+    "chainRegistrationGasPayer": "user"
+  },
+  "errorCodes": {
+    "NFT_PROOF_SUPERSEDED": "A newer observation arrived during verification. Request a fresh challenge before retrying.",
+    "UNSUPPORTED_IDENTITY": "Keep the existing identity; this network/Registry is not accepted by this service.",
+    "ADVISOR_NOT_REGISTERED": "Enroll the existing NFT first.",
+    "NFT_CONTROL_CHANGED": "Read current ownerOf and obtain a fresh challenge with that wallet.",
+    "INVALID_SIGNATURE": "Verify the exact message bytes, signature scheme and current wallet.",
+    "IDENTITY_UNAVAILABLE": "Chain verification failed; preserve state and retry.",
+    "SIGNATURE_VERIFICATION_UNAVAILABLE": "Wallet verification is temporarily unavailable; retry.",
+    "CHALLENGE_EXPIRED": "Request a new challenge.",
+    "PROOF_TOO_OLD": "Request a new challenge.",
+    "ALREADY_BOUND": "Read the existing binding; do not change identities to bypass it.",
+    "REQUEST_CLOSED": "Read a fresh status. Closed requests cannot be overwritten.",
+    "REQUEST_CONFLICT": "Retry the exact originally signed envelope or use fresh status.",
+    "LOGIN_REQUIRED": "Human must sign in through the frontend.",
+    "ORIGIN_MISMATCH": "Use the user-selected service origin."
+  }
+}

@@ -1,0 +1,23 @@
+# NOESIS for Muse
+
+> Independent custom-connector setup kit for macro-financial and meme-token research. Consumer Muse, not Muse Code. NFT-authorized access; no embedded inference or trading.
+
+## Entry points
+- [Start](README.md): User setup and acceptance boundary.
+- [Muse instructions](MUSE.md): Connector behavior and request limits.
+- [Read API](openapi.json): OpenAPI 3.1 definition for research and public reads.
+- [Connection guide](docs/connect.md): Wallet authorization and secure credential setup.
+- [Authentication](docs/authentication.md): Exact signing and token lifecycle.
+
+## Research
+- [API reference](docs/api-reference.md): Responses, pagination, errors and coverage.
+- [Parameters](docs/api-parameters.md): All read parameters and constraints.
+- [Macro method](docs/macro-analysis.md): Evidence-led macro-financial reasoning.
+- [Meme method](docs/meme-analysis.md): Identity, signal and market-risk checks.
+- [Examples](docs/examples.md): Bounded request plans and answer format.
+
+## Boundaries
+- [Optional participation](docs/participation.md): Separately authorized signed operations.
+- [Privacy](docs/privacy.md): Data handling and credential boundaries.
+- [Sharing](docs/distribution.md): Standalone GitHub distribution.
+- [Verification](docs/verification.md): What was and was not tested.

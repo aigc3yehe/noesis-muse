@@ -1,0 +1,2339 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "NOESIS research for Muse",
+    "version": "0.1.0",
+    "description": "Independent NOESIS integration. Not a Meta-issued manifest or an approved directory listing. Public API origin only. No trading or private account access."
+  },
+  "servers": [
+    {
+      "url": "https://noesis.run"
+    }
+  ],
+  "paths": {
+    "/v1/agent-api/macro/latest": {
+      "get": {
+        "operationId": "macro_latest",
+        "summary": "Latest saved macro, crypto and technology assessment.",
+        "description": "Required scope: macro:read. Discover IDs from the directory; never guess identifiers. Read docs/api-reference.md for response shapes and pagination.",
+        "parameters": [],
+        "security": [
+          {
+            "researchBearer": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Saved data or operation receipt. Preserve returned timestamps, units, gaps, cursor and quality fields. Response shapes vary by operation; do not assume an items envelope.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Failure; inspect HTTP status, error.code and Retry-After. No automatic retries.",
+            "headers": {
+              "Retry-After": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/agent-api/macro/{id}": {
+      "get": {
+        "operationId": "macro_report",
+        "summary": "Saved report by reportId.",
+        "description": "Required scope: macro:read. Discover IDs from the directory; never guess identifiers. Read docs/api-reference.md for response shapes and pagination.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            }
+          }
+        ],
+        "security": [
+          {
+            "researchBearer": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Saved data or operation receipt. Preserve returned timestamps, units, gaps, cursor and quality fields. Response shapes vary by operation; do not assume an items envelope.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Failure; inspect HTTP status, error.code and Retry-After. No automatic retries.",
+            "headers": {
+              "Retry-After": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/agent-api/signals": {
+      "get": {
+        "operationId": "signals",
+        "summary": "Saved JEV signals, maximum rolling 12 hours; recorded summaries only. Capability-dependent.",
+        "description": "Required scope: signals:read. Discover IDs from the directory; never guess identifiers. Read docs/api-reference.md for response shapes and pagination.",
+        "parameters": [
+          {
+            "name": "hours",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 12
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100
+            }
+          },
+          {
+            "name": "cursor",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 2000
+            }
+          }
+        ],
+        "security": [
+          {
+            "researchBearer": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Saved data or operation receipt. Preserve returned timestamps, units, gaps, cursor and quality fields. Response shapes vary by operation; do not assume an items envelope.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Failure; inspect HTTP status, error.code and Retry-After. No automatic retries.",
+            "headers": {
+              "Retry-After": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/agent-api/theses": {
+      "get": {
+        "operationId": "theses",
+        "summary": "Authenticated thesis stream; since/until filter receipt time.",
+        "description": "Required scope: theses:read. Discover IDs from the directory; never guess identifiers. Read docs/api-reference.md for response shapes and pagination.",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 500
+            }
+          },
+          {
+            "name": "cursor",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{48}$"
+            }
+          },
+          {
+            "name": "agent",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 200
+            }
+          },
+          {
+            "name": "q",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "active",
+                "expired"
+              ]
+            }
+          },
+          {
+            "name": "since",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "until",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        ],
+        "security": [
+          {
+            "researchBearer": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Saved data or operation receipt. Preserve returned timestamps, units, gaps, cursor and quality fields. Response shapes vary by operation; do not assume an items envelope.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Failure; inspect HTTP status, error.code and Retry-After. No automatic retries.",
+            "headers": {
+              "Retry-After": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/agent-api/data/catalog": {
+      "get": {
+        "operationId": "catalog",
+        "summary": "Available data families, metric IDs and entities.",
+        "description": "Required scope: market-data:read. Discover IDs from the directory; never guess identifiers. Read docs/api-reference.md for response shapes and pagination.",
+        "parameters": [],
+        "security": [
+          {
+            "researchBearer": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Saved data or operation receipt. Preserve returned timestamps, units, gaps, cursor and quality fields. Response shapes vary by operation; do not assume an items envelope.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Failure; inspect HTTP status, error.code and Retry-After. No automatic retries.",
+            "headers": {
+              "Retry-After": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/agent-api/data/indicators": {
+      "get": {
+        "operationId": "indicators",
+        "summary": "Metric definitions and quality.",
+        "description": "Required scope: market-data:read. Discover IDs from the directory; never guess identifiers. Read docs/api-reference.md for response shapes and pagination.",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 1000
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 100000
+            }
+          },
+          {
+            "name": "unit_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160,
+              "pattern": "^(?!.*\\.\\.)[a-zA-Z0-9][a-zA-Z0-9:._-]*$"
+            }
+          },
+          {
+            "name": "data_layer",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160,
+              "pattern": "^(?!.*\\.\\.)[a-zA-Z0-9][a-zA-Z0-9:._-]*$"
+            }
+          }
+        ],
+        "security": [
+          {
+            "researchBearer": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Saved data or operation receipt. Preserve returned timestamps, units, gaps, cursor and quality fields. Response shapes vary by operation; do not assume an items envelope.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Failure; inspect HTTP status, error.code and Retry-After. No automatic retries.",
+            "headers": {
+              "Retry-After": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/agent-api/data/latest": {
+      "get": {
+        "operationId": "latest",
+        "summary": "Latest stored metric observation.",
+        "description": "Required scope: market-data:read. Discover IDs from the directory; never guess identifiers. Read docs/api-reference.md for response shapes and pagination.",
+        "parameters": [
+          {
+            "name": "metric_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160,
+              "pattern": "^(?!.*\\.\\.)[a-zA-Z0-9][a-zA-Z0-9:._-]*$"
+            }
+          },
+          {
+            "name": "entity",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160,
+              "pattern": "^[^\\u0000-\\u001f\\u007f]+$"
+            }
+          }
+        ],
+        "security": [
+          {
+            "researchBearer": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Saved data or operation receipt. Preserve returned timestamps, units, gaps, cursor and quality fields. Response shapes vary by operation; do not assume an items envelope.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Failure; inspect HTTP status, error.code and Retry-After. No automatic retries.",
+            "headers": {
+              "Retry-After": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/agent-api/data/freshness": {
+      "get": {
+        "operationId": "freshness",
+        "summary": "Source freshness and quality; not proof of latest official release.",
+        "description": "Required scope: market-data:read. Discover IDs from the directory; never guess identifiers. Read docs/api-reference.md for response shapes and pagination.",
+        "parameters": [
+          {
+            "name": "metric_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160,
+              "pattern": "^(?!.*\\.\\.)[a-zA-Z0-9][a-zA-Z0-9:._-]*$"
+            }
+          },
+          {
+            "name": "entity",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160,
+              "pattern": "^[^\\u0000-\\u001f\\u007f]+$"
+            }
+          }
+        ],
+        "security": [
+          {
+            "researchBearer": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Saved data or operation receipt. Preserve returned timestamps, units, gaps, cursor and quality fields. Response shapes vary by operation; do not assume an items envelope.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Failure; inspect HTTP status, error.code and Retry-After. No automatic retries.",
+            "headers": {
+              "Retry-After": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/agent-api/data/ohlcv": {
+      "get": {
+        "operationId": "ohlcv",
+        "summary": "Stored candles and actual coverage.",
+        "description": "Required scope: market-data:read. Discover IDs from the directory; never guess identifiers. Read docs/api-reference.md for response shapes and pagination.",
+        "parameters": [
+          {
+            "name": "instrument_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160,
+              "pattern": "^(?!.*\\.\\.)[a-zA-Z0-9][a-zA-Z0-9:._-]*$"
+            }
+          },
+          {
+            "name": "interval",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "1m",
+                "3m",
+                "5m",
+                "15m",
+                "30m",
+                "1h",
+                "2h",
+                "4h",
+                "6h",
+                "8h",
+                "12h",
+                "1d",
+                "3d",
+                "1w",
+                "1M"
+              ]
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 1000
+            }
+          }
+        ],
+        "security": [
+          {
+            "researchBearer": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Saved data or operation receipt. Preserve returned timestamps, units, gaps, cursor and quality fields. Response shapes vary by operation; do not assume an items envelope.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Failure; inspect HTTP status, error.code and Retry-After. No automatic retries.",
+            "headers": {
+              "Retry-After": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/agent-api/data/stock-context": {
+      "get": {
+        "operationId": "stock_context",
+        "summary": "Stock evidence with field-level gaps.",
+        "description": "Required scope: market-data:read. Discover IDs from the directory; never guess identifiers. Read docs/api-reference.md for response shapes and pagination.",
+        "parameters": [
+          {
+            "name": "symbol",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160,
+              "pattern": "^(?!.*\\.\\.)[a-zA-Z0-9][a-zA-Z0-9:._-]*$"
+            }
+          },
+          {
+            "name": "market",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "us",
+                "hk",
+                "cn",
+                "US",
+                "HK",
+                "CN"
+              ]
+            }
+          }
+        ],
+        "security": [
+          {
+            "researchBearer": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Saved data or operation receipt. Preserve returned timestamps, units, gaps, cursor and quality fields. Response shapes vary by operation; do not assume an items envelope.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Failure; inspect HTTP status, error.code and Retry-After. No automatic retries.",
+            "headers": {
+              "Retry-After": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/agent-api/data/instruments": {
+      "get": {
+        "operationId": "instruments",
+        "summary": "Instrument IDs; inspect sourceMayHaveMore.",
+        "description": "Required scope: market-data:read. Discover IDs from the directory; never guess identifiers. Read docs/api-reference.md for response shapes and pagination.",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 1000
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 100000
+            }
+          },
+          {
+            "name": "market",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160,
+              "pattern": "^(?!.*\\.\\.)[a-zA-Z0-9][a-zA-Z0-9:._-]*$"
+            }
+          }
+        ],
+        "security": [
+          {
+            "researchBearer": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Saved data or operation receipt. Preserve returned timestamps, units, gaps, cursor and quality fields. Response shapes vary by operation; do not assume an items envelope.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Failure; inspect HTTP status, error.code and Retry-After. No automatic retries.",
+            "headers": {
+              "Retry-After": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/agent-api/data/instruments/{id}": {
+      "get": {
+        "operationId": "instrument",
+        "summary": "Instrument identity and mappings.",
+        "description": "Required scope: market-data:read. Discover IDs from the directory; never guess identifiers. Read docs/api-reference.md for response shapes and pagination.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160,
+              "pattern": "^(?!.*\\.\\.)[a-zA-Z0-9][a-zA-Z0-9:._-]*$"
+            }
+          }
+        ],
+        "security": [
+          {
+            "researchBearer": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Saved data or operation receipt. Preserve returned timestamps, units, gaps, cursor and quality fields. Response shapes vary by operation; do not assume an items envelope.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Failure; inspect HTTP status, error.code and Retry-After. No automatic retries.",
+            "headers": {
+              "Retry-After": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/agent-api/data/taxonomies": {
+      "get": {
+        "operationId": "taxonomies",
+        "summary": "Sector and theme directory.",
+        "description": "Required scope: market-data:read. Discover IDs from the directory; never guess identifiers. Read docs/api-reference.md for response shapes and pagination.",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 1000
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 100000
+            }
+          }
+        ],
+        "security": [
+          {
+            "researchBearer": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Saved data or operation receipt. Preserve returned timestamps, units, gaps, cursor and quality fields. Response shapes vary by operation; do not assume an items envelope.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Failure; inspect HTTP status, error.code and Retry-After. No automatic retries.",
+            "headers": {
+              "Retry-After": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/agent-api/data/taxonomies/{id}/instruments": {
+      "get": {
+        "operationId": "taxonomy_members",
+        "summary": "Instruments in one taxonomy.",
+        "description": "Required scope: market-data:read. Discover IDs from the directory; never guess identifiers. Read docs/api-reference.md for response shapes and pagination.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160,
+              "pattern": "^(?!.*\\.\\.)[a-zA-Z0-9][a-zA-Z0-9:._-]*$"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 1000
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 100000
+            }
+          }
+        ],
+        "security": [
+          {
+            "researchBearer": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Saved data or operation receipt. Preserve returned timestamps, units, gaps, cursor and quality fields. Response shapes vary by operation; do not assume an items envelope.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Failure; inspect HTTP status, error.code and Retry-After. No automatic retries.",
+            "headers": {
+              "Retry-After": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/agent-api/data/holdings/subjects": {
+      "get": {
+        "operationId": "subjects",
+        "summary": "Public disclosure subjects.",
+        "description": "Required scope: market-data:read. Discover IDs from the directory; never guess identifiers. Read docs/api-reference.md for response shapes and pagination.",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 1000
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 100000
+            }
+          },
+          {
+            "name": "subject_type",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "person",
+                "qdii_fund"
+              ]
+            }
+          }
+        ],
+        "security": [
+          {
+            "researchBearer": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Saved data or operation receipt. Preserve returned timestamps, units, gaps, cursor and quality fields. Response shapes vary by operation; do not assume an items envelope.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Failure; inspect HTTP status, error.code and Retry-After. No automatic retries.",
+            "headers": {
+              "Retry-After": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/agent-api/data/holdings/subjects/{id}/snapshots": {
+      "get": {
+        "operationId": "snapshots",
+        "summary": "Reported disclosure snapshots.",
+        "description": "Required scope: market-data:read. Discover IDs from the directory; never guess identifiers. Read docs/api-reference.md for response shapes and pagination.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160,
+              "pattern": "^(?!.*\\.\\.)[a-zA-Z0-9][a-zA-Z0-9:._-]*$"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 1000
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 100000
+            }
+          }
+        ],
+        "security": [
+          {
+            "researchBearer": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Saved data or operation receipt. Preserve returned timestamps, units, gaps, cursor and quality fields. Response shapes vary by operation; do not assume an items envelope.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Failure; inspect HTTP status, error.code and Retry-After. No automatic retries.",
+            "headers": {
+              "Retry-After": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/agent-api/data/holdings/subjects/{id}/positions": {
+      "get": {
+        "operationId": "positions",
+        "summary": "Disclosed holdings; these are not current private positions.",
+        "description": "Required scope: market-data:read. Discover IDs from the directory; never guess identifiers. Read docs/api-reference.md for response shapes and pagination.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160,
+              "pattern": "^(?!.*\\.\\.)[a-zA-Z0-9][a-zA-Z0-9:._-]*$"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 1000
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 100000
+            }
+          },
+          {
+            "name": "compare",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "previous",
+                "none"
+              ]
+            }
+          }
+        ],
+        "security": [
+          {
+            "researchBearer": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Saved data or operation receipt. Preserve returned timestamps, units, gaps, cursor and quality fields. Response shapes vary by operation; do not assume an items envelope.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Failure; inspect HTTP status, error.code and Retry-After. No automatic retries.",
+            "headers": {
+              "Retry-After": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/agent-api/data/holdings/subjects/{id}/transactions": {
+      "get": {
+        "operationId": "transactions",
+        "summary": "Publicly disclosed transactions; source cap may apply.",
+        "description": "Required scope: market-data:read. Discover IDs from the directory; never guess identifiers. Read docs/api-reference.md for response shapes and pagination.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160,
+              "pattern": "^(?!.*\\.\\.)[a-zA-Z0-9][a-zA-Z0-9:._-]*$"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 1000
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 100000
+            }
+          }
+        ],
+        "security": [
+          {
+            "researchBearer": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Saved data or operation receipt. Preserve returned timestamps, units, gaps, cursor and quality fields. Response shapes vary by operation; do not assume an items envelope.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Failure; inspect HTTP status, error.code and Retry-After. No automatic retries.",
+            "headers": {
+              "Retry-After": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/agent-api/data/holdings/documents/{id}": {
+      "get": {
+        "operationId": "document",
+        "summary": "Disclosure document; positions and transactions paginate independently.",
+        "description": "Required scope: market-data:read. Discover IDs from the directory; never guess identifiers. Read docs/api-reference.md for response shapes and pagination.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^[1-9][0-9]*$"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 1000
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 100000
+            }
+          }
+        ],
+        "security": [
+          {
+            "researchBearer": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Saved data or operation receipt. Preserve returned timestamps, units, gaps, cursor and quality fields. Response shapes vary by operation; do not assume an items envelope.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Failure; inspect HTTP status, error.code and Retry-After. No automatic retries.",
+            "headers": {
+              "Retry-After": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/agent-api/data/series": {
+      "get": {
+        "operationId": "series",
+        "summary": "Metric history with original dates.",
+        "description": "Required scope: market-data:read. Discover IDs from the directory; never guess identifiers. Read docs/api-reference.md for response shapes and pagination.",
+        "parameters": [
+          {
+            "name": "metric_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160,
+              "pattern": "^(?!.*\\.\\.)[a-zA-Z0-9][a-zA-Z0-9:._-]*$"
+            }
+          },
+          {
+            "name": "entity",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160,
+              "pattern": "^[^\\u0000-\\u001f\\u007f]+$"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 1000
+            }
+          },
+          {
+            "name": "start",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "end",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        ],
+        "security": [
+          {
+            "researchBearer": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Saved data or operation receipt. Preserve returned timestamps, units, gaps, cursor and quality fields. Response shapes vary by operation; do not assume an items envelope.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Failure; inspect HTTP status, error.code and Retry-After. No automatic retries.",
+            "headers": {
+              "Retry-After": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/identity/public/advisors": {
+      "get": {
+        "operationId": "advisors",
+        "summary": "Public NFT advisor directory (not a private user profile).",
+        "description": "Required scope: public. Discover IDs from the directory; never guess identifiers. Read docs/api-reference.md for response shapes and pagination.",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 50
+            }
+          },
+          {
+            "name": "cursor",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "rank",
+                "decision",
+                "proposal",
+                "created"
+              ]
+            }
+          },
+          {
+            "name": "q",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 200
+            }
+          }
+        ],
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Saved data or operation receipt. Preserve returned timestamps, units, gaps, cursor and quality fields. Response shapes vary by operation; do not assume an items envelope.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Failure; inspect HTTP status, error.code and Retry-After. No automatic retries.",
+            "headers": {
+              "Retry-After": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/identity/public/advisors/{id}": {
+      "get": {
+        "operationId": "advisor",
+        "summary": "Public NFT advisor by identity key.",
+        "description": "Required scope: public. Discover IDs from the directory; never guess identifiers. Read docs/api-reference.md for response shapes and pagination.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 220
+            }
+          }
+        ],
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Saved data or operation receipt. Preserve returned timestamps, units, gaps, cursor and quality fields. Response shapes vary by operation; do not assume an items envelope.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Failure; inspect HTTP status, error.code and Retry-After. No automatic retries.",
+            "headers": {
+              "Retry-After": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/identity/public/summary": {
+      "get": {
+        "operationId": "identity_summary",
+        "summary": "Public registration count.",
+        "description": "Required scope: public. Discover IDs from the directory; never guess identifiers. Read docs/api-reference.md for response shapes and pagination.",
+        "parameters": [],
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Saved data or operation receipt. Preserve returned timestamps, units, gaps, cursor and quality fields. Response shapes vary by operation; do not assume an items envelope.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Failure; inspect HTTP status, error.code and Retry-After. No automatic retries.",
+            "headers": {
+              "Retry-After": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/theses/public": {
+      "get": {
+        "operationId": "public_theses",
+        "summary": "Public publication receipts; preserve filters across pages.",
+        "description": "Required scope: public. Discover IDs from the directory; never guess identifiers. Read docs/api-reference.md for response shapes and pagination.",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 50
+            }
+          },
+          {
+            "name": "cursor",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 2000
+            }
+          },
+          {
+            "name": "agent",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 220
+            }
+          },
+          {
+            "name": "submissionId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "q",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 200
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "active",
+                "expired"
+              ]
+            }
+          },
+          {
+            "name": "verifiable",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "const": "true"
+            }
+          }
+        ],
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Saved data or operation receipt. Preserve returned timestamps, units, gaps, cursor and quality fields. Response shapes vary by operation; do not assume an items envelope.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Failure; inspect HTTP status, error.code and Retry-After. No automatic retries.",
+            "headers": {
+              "Retry-After": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/theses/public/{id}": {
+      "get": {
+        "operationId": "thesis_receipt",
+        "summary": "Public thesis receipt and recorded evaluation.",
+        "description": "Required scope: public. Discover IDs from the directory; never guess identifiers. Read docs/api-reference.md for response shapes and pagination.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Saved data or operation receipt. Preserve returned timestamps, units, gaps, cursor and quality fields. Response shapes vary by operation; do not assume an items envelope.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Failure; inspect HTTP status, error.code and Retry-After. No automatic retries.",
+            "headers": {
+              "Retry-After": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/agent-api/protocol": {
+      "get": {
+        "operationId": "research_protocol",
+        "summary": "Read the current public protocol before using this capability.",
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Saved data or operation receipt. Preserve returned timestamps, units, gaps, cursor and quality fields. Response shapes vary by operation; do not assume an items envelope.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Failure; inspect HTTP status, error.code and Retry-After. No automatic retries.",
+            "headers": {
+              "Retry-After": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/identity/protocol": {
+      "get": {
+        "operationId": "identity_protocol",
+        "summary": "Read the current public protocol before using this capability.",
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Saved data or operation receipt. Preserve returned timestamps, units, gaps, cursor and quality fields. Response shapes vary by operation; do not assume an items envelope.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Failure; inspect HTTP status, error.code and Retry-After. No automatic retries.",
+            "headers": {
+              "Retry-After": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/theses/protocol": {
+      "get": {
+        "operationId": "theses_protocol",
+        "summary": "Read the current public protocol before using this capability.",
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Saved data or operation receipt. Preserve returned timestamps, units, gaps, cursor and quality fields. Response shapes vary by operation; do not assume an items envelope.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Failure; inspect HTTP status, error.code and Retry-After. No automatic retries.",
+            "headers": {
+              "Retry-After": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/agent-api/auth/session": {
+      "delete": {
+        "operationId": "logout",
+        "summary": "Revoke the current research credential when the user disconnects.",
+        "security": [
+          {
+            "researchBearer": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Saved data or operation receipt. Preserve returned timestamps, units, gaps, cursor and quality fields. Response shapes vary by operation; do not assume an items envelope.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Failure; inspect HTTP status, error.code and Retry-After. No automatic retries.",
+            "headers": {
+              "Retry-After": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "researchBearer": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "Short-lived NFT-authorized research token"
+      }
+    }
+  }
+}
